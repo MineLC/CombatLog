@@ -6,6 +6,7 @@ import java.util.WeakHashMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import lc.mine.combatlog.command.CombatLogReloadCommand;
+import lc.mine.combatlog.hook.PlaceholderApiHook;
 import lc.mine.combatlog.listener.data.ListenerRegister;
 import lc.mine.combatlog.listener.PlayerDamageListener;
 import lc.mine.combatlog.listener.PlayerDeathListener;
@@ -26,6 +27,10 @@ public class CombatLogPlugin extends JavaPlugin {
             getLogger().warning("Combatlog can't start without lccore");
             return;
         }
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderApiHook(OPTIONS).register();
+        }
+
         load();
         getCommand("combatreload").setExecutor(new CombatLogReloadCommand(this));
 

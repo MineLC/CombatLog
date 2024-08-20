@@ -19,6 +19,10 @@
             <id>songoda-public</id>
             <url>https://repo.songoda.com/repository/public/</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -34,6 +38,12 @@
             <version>0.0.1</version>
             <systemPath>${basedir}/dependencies/Core-0.0.1.jar</systemPath>
             <scope>system</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.6</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

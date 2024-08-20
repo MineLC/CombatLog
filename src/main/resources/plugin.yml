@@ -7,6 +7,7 @@ website: play.mine.lc
 authors: [iChocoMilk]
 
 depend: [LCCore]
+softdepend: [PlaceholderApi]
 
 commands:
   combatreload:
