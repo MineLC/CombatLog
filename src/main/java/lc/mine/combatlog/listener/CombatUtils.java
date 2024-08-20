@@ -24,11 +24,18 @@ public final class CombatUtils {
 
         PlayerData killerData = database.getCached(killer.getUniqueId());
         if (killerData == null) {
-            killerData = new PlayerData(killer.getName());
+            killerData = new PlayerData.New(killer.getName());
             database.create(killer, killerData);
         }
         killerData.setLcoins(killerData.getLcoins() + options.getLcoinsOnKill());
         Message.get().send(killer, "kill-reward");
+    }
+
+    public DamageCause getCause(final Player player, final DamageCause fallback) {
+        if (player.getLastDamageCause() == null) {
+            return fallback;
+        }
+        return player.getLastDamageCause().getCause();
     }
 
     public void sendMessage(final DamageCause cause, final Player victim, final Player killer) {

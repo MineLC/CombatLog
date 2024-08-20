@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.bukkit.Statistic;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import lc.mine.combatlog.listener.data.EventListener;
@@ -26,7 +27,7 @@ public final class PlayerQuitListener implements EventListener<PlayerQuitEvent> 
             return;
         }
         Message.get().send(combat.getPlayer(), "combat");
-        untag.execute(event.getPlayer().getLastDamageCause().getCause(), event.getPlayer(), combat.getPlayer());
+        untag.execute(untag.getCause(event.getPlayer(), DamageCause.ENTITY_ATTACK), event.getPlayer(), combat.getPlayer());
         combat.getPlayer().incrementStatistic(Statistic.PLAYER_KILLS, 1);
         event.getPlayer().incrementStatistic(Statistic.DEATHS, 1);
     }

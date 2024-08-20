@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import lc.mine.combatlog.listener.data.EventListener;
 import lc.mine.combatlog.storage.PlayerInCombat;
@@ -23,11 +24,11 @@ public class PlayerDeathListener implements EventListener<PlayerDeathEvent> {
         PlayerInCombat combat = playersInCombat.remove(event.getEntity().getUniqueId());
         event.setDeathMessage(null);
         if (combat == null || (System.currentTimeMillis() - combat.getTime() > untag.getOptions().getPvpTagTime())) {
-            untag.sendMessage(event.getEntity().getLastDamageCause().getCause(), event.getEntity(), null);
+            untag.sendMessage(DamageCause.SUICIDE, event.getEntity(), null);
             return;
         }
         if (event.getEntity().getKiller() != null) {
-            untag.execute(event.getEntity().getLastDamageCause().getCause(), event.getEntity(), event.getEntity().getKiller());
+            untag.execute(untag.getCause(event.getEntity(), DamageCause.ENTITY_ATTACK), event.getEntity(), event.getEntity().getKiller());
         }
     }
 
