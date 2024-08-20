@@ -1,0 +1,15 @@
+name: LCCombat
+main: lc.mine.combatlog.CombatLogPlugin
+version: 0.0.1
+description: MineLC combatlog plugin
+
+website: play.mine.lc
+authors: [iChocoMilk]
+
+depend: [LCCore]
+
+commands:
+  combatreload:
+    permission: "combatlog.reload"
+    permission-message: "&cYou don't have permissions for reload the plugin"
+    description: "Reload combatlog"
