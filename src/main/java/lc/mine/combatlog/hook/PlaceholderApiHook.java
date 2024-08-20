@@ -34,10 +34,10 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
             case "kdr":
             final int kills = player.getStatistic(Statistic.PLAYER_KILLS);
             final int deaths = player.getStatistic(Statistic.DEATHS);
-            return (deaths == 0) ? String.valueOf(kills) : String.valueOf(((double)kills / (double)deaths));
+            return (deaths == 0) ? String.valueOf(kills) : String.format("%.2f", ((double)kills / (double)deaths));
 
             case "level":
-                return String.format("%.2f", player.getStatistic(Statistic.PLAYER_KILLS) / options.getKillsToLevelup());
+                return String.valueOf(player.getStatistic(Statistic.PLAYER_KILLS) / options.getKillsToLevelup());
             default:
                 break;
         }
