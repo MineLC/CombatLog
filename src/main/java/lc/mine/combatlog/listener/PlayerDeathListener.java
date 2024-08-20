@@ -21,13 +21,13 @@ public class PlayerDeathListener implements EventListener<PlayerDeathEvent> {
     @Override
     public void handle(final PlayerDeathEvent event) {
         PlayerInCombat combat = playersInCombat.remove(event.getEntity().getUniqueId());
+        event.setDeathMessage(null);
         if (combat == null || (System.currentTimeMillis() - combat.getTime() > untag.getOptions().getPvpTagTime())) {
             untag.sendMessage(event.getEntity().getLastDamageCause().getCause(), event.getEntity(), null);
             return;
         }
         if (event.getEntity().getKiller() != null) {
             untag.execute(event.getEntity().getLastDamageCause().getCause(), event.getEntity(), event.getEntity().getKiller());
-            event.setDeathMessage(null);
         }
     }
 
