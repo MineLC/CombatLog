@@ -50,5 +50,6 @@ public class CombatLogPlugin extends JavaPlugin {
 
         OPTIONS.setLcoinsOnKill(getConfig().getInt("kill-lcoins"));            
         OPTIONS.setPvpTagTime((int)(getConfig().getDouble("tag-duration") * 1000D));
+        OPTIONS.setKillsToLevelup(getConfig().getInt("levelup-need-kills"));
     }
 }
