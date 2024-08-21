@@ -25,3 +25,5 @@ SUICIDE: "&e%v% &fse ha &c&lSUICIDADO"
 THORNS: "&e%v% &fha muerto por el &5&lVACIO"
 VOID: "&e%v% &fha muerto por el &5&lVACIO"
 WITHER:  "&e%v% &fha muerto por efecto &8&lWITHER"
+
+spawn-time-wait: "&4&lERROR: &cPara ir al spawn necesitas esperar &e%time% &csegundos"

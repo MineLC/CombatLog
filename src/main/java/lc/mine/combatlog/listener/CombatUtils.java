@@ -1,6 +1,8 @@
 package lc.mine.combatlog.listener;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
@@ -43,6 +45,8 @@ public final class CombatUtils {
             .replace("%v%", victim.getName());
         if (killer != null) {
             message += Message.get().message("if-killer-exist").replace("%k%", killer.getName());
+            killer.playSound(killer.getLocation(), Sound.EXPLODE, 1.0f, 1.0f);
+            killer.getWorld().playEffect(killer.getLocation(), Effect.EXPLOSION_LARGE, 1);
         }
         Bukkit.broadcastMessage(message);
     }
