@@ -13,7 +13,7 @@ public final class v1_8R3 {
         final IChatBaseComponent chatTitle = ChatSerializer.a("{\"text\": \"" + title + "\"}");
 
         final PacketPlayOutTitle packettitle = new PacketPlayOutTitle((subtitle) ? EnumTitleAction.SUBTITLE : EnumTitleAction.TITLE, chatTitle);
-        final PacketPlayOutTitle length = new PacketPlayOutTitle(1, 40, 5);
+        final PacketPlayOutTitle length = new PacketPlayOutTitle(1, 60, 5);
 
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packettitle);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(length);

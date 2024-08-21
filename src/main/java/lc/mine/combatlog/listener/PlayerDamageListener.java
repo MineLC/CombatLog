@@ -21,6 +21,10 @@ public final class PlayerDamageListener implements Listener {
 
     @EventHandler
     public void handle(EntityDamageByEntityEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
         if (!(event.getEntity() instanceof Player victim)
             || !(event.getDamager() instanceof Player damager)
             || (damager.equals(victim)))

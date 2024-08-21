@@ -46,7 +46,7 @@ public final class CombatUtils {
         if (killer != null) {
             message += Message.get().message("if-killer-exist").replace("%k%", killer.getName());
             killer.playSound(killer.getLocation(), Sound.EXPLODE, 1.0f, 1.0f);
-            killer.getWorld().playEffect(killer.getLocation(), Effect.EXPLOSION_LARGE, 1);
+            killer.getWorld().playEffect(victim.getLocation(), Effect.EXPLOSION_LARGE, 1);
         }
         Bukkit.broadcastMessage(message);
     }

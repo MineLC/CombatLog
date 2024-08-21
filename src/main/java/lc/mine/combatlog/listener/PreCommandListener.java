@@ -23,6 +23,9 @@ public final class PreCommandListener implements Listener {
 
     @EventHandler
     public void handle(final PlayerCommandPreprocessEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
         if (!options.getBlockCommands().contains(StringUtils.split(event.getMessage(), ' ')[0])) {
             return;
         }
