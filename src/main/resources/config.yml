@@ -2,6 +2,27 @@ kill-lcoins: 5
 tag-duration: 10 # in seconds. Support decimal
 
 levelup-need-kills: 5
+instant-respawn: true
 
 combat-block-commands:
   - "spawn"
+
+death-titles:
+  chiteros:
+    title: "&c&lMucho chitero"
+    subtitle: "&7Que malos son >:("
+  pedro:
+    title: "&b&lPedro &a✔"
+    subtitle: "&7Pedro &a✔"
+  gg:
+    title: "&b&lGG"
+    subtitle: "&7Moriste con honores"
+  maracaqlia:
+    title: "&d&lMaraca qlia"
+    subtitle: "&7sapo triplehijueputa"
+  paja:
+    title: "&a&lOH! ME VENGO"
+    subtitle: "&7Faraon Love Shady - 2020"
+  abuelo:
+    title: "&eMi abuelo decía:"
+    subtitle: "&7Esto con los milicos no pasaba"

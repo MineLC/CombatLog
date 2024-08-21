@@ -4,9 +4,9 @@ import java.util.List;
 
 import net.md_5.bungee.api.ChatColor;
 
-final class MessageColor {
+public final class MessageColor {
 
-    static String color(final Object object) {
+    public static String color(final Object object) {
         if (object == null) {
             return null;
         }

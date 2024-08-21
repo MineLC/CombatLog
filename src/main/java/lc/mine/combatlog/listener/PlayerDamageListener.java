@@ -4,13 +4,14 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import lc.mine.combatlog.listener.data.EventListener;
 import lc.mine.combatlog.message.Message;
 import lc.mine.combatlog.storage.PlayerInCombat;
 
-public final class PlayerDamageListener implements EventListener<EntityDamageByEntityEvent> {
+public final class PlayerDamageListener implements Listener {
 
     private final WeakHashMap<UUID, PlayerInCombat> playersInCombat;
 
@@ -18,7 +19,7 @@ public final class PlayerDamageListener implements EventListener<EntityDamageByE
         this.playersInCombat = playersInCombat;
     }
 
-    @Override
+    @EventHandler
     public void handle(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player victim)
             || !(event.getDamager() instanceof Player damager)
@@ -40,10 +41,5 @@ public final class PlayerDamageListener implements EventListener<EntityDamageByE
         }
         combat.setPlayer(other);
         combat.setTime(time);
-    }
-
-    @Override
-    public Class<EntityDamageByEntityEvent> eventClass() {
-        return EntityDamageByEntityEvent.class;
     }
 }

@@ -4,14 +4,15 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import lc.mine.combatlog.listener.data.EventListener;
 import lc.mine.combatlog.message.Message;
 import lc.mine.combatlog.storage.Options;
 import lc.mine.combatlog.storage.PlayerInCombat;
 
-public final class PreCommandListener implements EventListener<PlayerCommandPreprocessEvent> {
+public final class PreCommandListener implements Listener {
     private final Options options;
     private final WeakHashMap<UUID, PlayerInCombat> playersInCombat;
 
@@ -20,7 +21,7 @@ public final class PreCommandListener implements EventListener<PlayerCommandPrep
         this.playersInCombat = playersInCombat;
     }
 
-    @Override
+    @EventHandler
     public void handle(final PlayerCommandPreprocessEvent event) {
         if (!options.getBlockCommands().contains(StringUtils.split(event.getMessage(), ' ')[0])) {
             return;
