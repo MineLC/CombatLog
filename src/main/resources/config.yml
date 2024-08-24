@@ -7,6 +7,11 @@ instant-respawn: true
 combat-block-commands:
   - "spawn"
 
+# In ticks. 20 ticks = 1 second
+title-fadeIn: 20
+title-stay: 80
+title-fadeOut: 20
+
 death-titles:
   chiteros:
     title: "&c&lMucho chitero"

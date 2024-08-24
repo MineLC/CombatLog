@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.github.paperspigot.Title;
 
 import lc.mine.combatlog.command.CombatLogReloadCommand;
 import lc.mine.combatlog.hook.PlaceholderApiHook;
@@ -21,7 +22,6 @@ import lc.mine.combatlog.message.MessageColor;
 import lc.mine.combatlog.message.StartMessages;
 import lc.mine.combatlog.storage.Options;
 import lc.mine.combatlog.storage.PlayerInCombat;
-import lc.mine.combatlog.storage.title.Title;
 import lc.mine.combatlog.storage.title.TitleData;
 import lc.mine.core.CorePlugin;
 
@@ -72,18 +72,22 @@ public class CombatLogPlugin extends JavaPlugin {
         if (section == null) {
             return null;
         }
+        final int fadeIn = config.getInt("title-fadeIn");
+        final int stay = config.getInt("title-stay");
+        final int fadeOut = config.getInt("title-fadeOut");
         final Set<String> keys = section.getKeys(false);
         final Title[] titles = new Title[keys.size()];
         int i = 0;
         for (final String key : keys) {
             final ConfigurationSection titleSection = section.getConfigurationSection(key);
             if (titleSection == null) {
-                titles[i++] = new Title(key, null);
+                titles[i++] = new Title(key);
                 continue;
             }
             titles[i++] = new Title(
                 MessageColor.color(titleSection.get("title")),
-                MessageColor.color(titleSection.get("subtitle"))
+                MessageColor.color(titleSection.get("subtitle")),
+                fadeIn, stay, fadeOut
             );
         }
         return (titles == null) ? null : new TitleData(titles);

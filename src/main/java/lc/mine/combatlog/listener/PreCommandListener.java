@@ -3,7 +3,8 @@ package lc.mine.combatlog.listener;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -35,7 +36,7 @@ public final class PreCommandListener implements Listener {
         }
         final long diference = (System.currentTimeMillis() - combat.getTime());
         if (diference < options.getPvpTagTime()) {
-            event.getPlayer().sendMessage(Message.get().message("spawn-time-wait").replace("%time%", String.valueOf(options.getPvpTagTime() - (diference/1000))));
+            ((CommandSender)event.getPlayer()).sendMessage(Message.get().message("spawn-time-wait").replace("%time%", String.valueOf(options.getPvpTagTime() - (diference/1000))));
             event.setCancelled(true);
             return;
         }

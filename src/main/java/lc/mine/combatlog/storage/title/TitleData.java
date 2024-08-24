@@ -1,5 +1,7 @@
 package lc.mine.combatlog.storage.title;
 
+import org.github.paperspigot.Title;
+
 public final class TitleData {
 
     private final Title[] titles;

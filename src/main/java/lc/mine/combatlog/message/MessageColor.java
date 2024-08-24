@@ -2,7 +2,7 @@ package lc.mine.combatlog.message;
 
 import java.util.List;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 public final class MessageColor {
 
