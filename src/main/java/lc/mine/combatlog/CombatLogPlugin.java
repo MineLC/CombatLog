@@ -7,6 +7,7 @@ import java.util.WeakHashMap;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.github.paperspigot.Title;
@@ -31,7 +32,8 @@ public class CombatLogPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!(getServer().getPluginManager().getPlugin("LCCore") instanceof CorePlugin core)) {
+        final Plugin corePlugin = getServer().getPluginManager().getPlugin("LCCore");
+        if (corePlugin == null) {
             getLogger().warning("Combatlog can't start without lccore");
             return;
         }
@@ -40,14 +42,15 @@ public class CombatLogPlugin extends JavaPlugin {
         }
 
         load();
+
         final WeakHashMap<UUID, PlayerInCombat> playersInCombat = new WeakHashMap<>();
-        final CombatUtils untagActions = new CombatUtils(core.getData(), OPTIONS);
+        final CombatUtils untagActions = new CombatUtils(((CorePlugin)corePlugin).getData(), OPTIONS);
         final PluginManager pluginManager = getServer().getPluginManager();
+
         pluginManager.registerEvents(new PlayerDeathListener(this, untagActions, playersInCombat), this);
         pluginManager.registerEvents(new PlayerQuitListener(untagActions, playersInCombat), this);
         pluginManager.registerEvents(new PlayerDamageListener(playersInCombat), this);
         pluginManager.registerEvents(new PreCommandListener(OPTIONS, playersInCombat), this);
-
 
         getCommand("combatreload").setExecutor(new CombatLogReloadCommand(this));
     }

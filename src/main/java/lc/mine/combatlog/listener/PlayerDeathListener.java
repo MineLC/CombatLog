@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,24 +26,36 @@ public class PlayerDeathListener implements Listener {
         this.untag = untag;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void handle(final PlayerDeathEvent event) {
-        PlayerInCombat combat = playersInCombat.remove(event.getEntity().getUniqueId());
+        final Player victim = event.getEntity();
+        final PlayerInCombat combat = playersInCombat.remove(victim.getUniqueId());
+
         event.setDeathMessage(null);
-        if (untag.getOptions().getInstantRespawn()) {
-            plugin.getServer().getScheduler().runTask(plugin, () -> event.getEntity().spigot().respawn());
-        }
+
         if (untag.getOptions().getTitleData() != null) {
-            event.getEntity().sendTitle(untag.getOptions().getTitleData().next());
+            victim.sendTitle(untag.getOptions().getTitleData().next());
+        }
+        if (untag.getOptions().getInstantRespawn()) {
+            plugin.getServer().getScheduler().runTask(plugin, () -> victim.spigot().respawn());
         }
 
-        if (combat == null || (System.currentTimeMillis() - combat.getTime() > untag.getOptions().getPvpTagTime())) {
-            untag.sendMessage(untag.getCause(event.getEntity(), DamageCause.SUICIDE), event.getEntity(), null);
+        victim.playSound(victim.getLocation(), Sound.BAT_DEATH, 1.0f, 1.0f);
+
+        if (combat == null) {
+            untag.sendMessage(untag.getCause(victim, DamageCause.SUICIDE), victim, null);
             return;
         }
-        event.getEntity().playSound(event.getEntity().getLocation(), Sound.BAT_DEATH, 1.0f, 1.0f);
-        if (event.getEntity().getKiller() != null) {
-            untag.execute(untag.getCause(event.getEntity(), DamageCause.ENTITY_ATTACK), event.getEntity(), event.getEntity().getKiller());
+
+        final PlayerInCombat enemy = playersInCombat.get(combat.getPlayer().getUniqueId());
+        if (enemy.getPlayer().equals(victim)) {
+            playersInCombat.remove(combat.getPlayer().getUniqueId());
         }
+
+        if ((System.currentTimeMillis() - combat.getTime() > untag.getOptions().getPvpTagTime())) {
+            untag.sendMessage(untag.getCause(victim, DamageCause.SUICIDE), victim, null);
+            return;
+        }
+        untag.execute(untag.getCause(victim, DamageCause.ENTITY_ATTACK), victim, combat.getPlayer());
     }
 }

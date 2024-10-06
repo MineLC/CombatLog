@@ -4,7 +4,9 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.bukkit.Statistic;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -21,15 +23,22 @@ public final class PlayerQuitListener implements Listener {
         this.untag = untag;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void handle(final PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
         final PlayerInCombat combat = playersInCombat.remove(event.getPlayer().getUniqueId());
-        if (combat == null || (System.currentTimeMillis() - combat.getTime() > untag.getOptions().getPvpTagTime())) {
+        if (combat == null) {
             return;
         }
+        final PlayerInCombat enemy = playersInCombat.get(combat.getPlayer().getUniqueId());
+        if (enemy.getPlayer().equals(player)) {
+            playersInCombat.remove(combat.getPlayer().getUniqueId());
+        }
+
         Message.get().send(combat.getPlayer(), "combat");
-        untag.execute(untag.getCause(event.getPlayer(), DamageCause.ENTITY_ATTACK), event.getPlayer(), combat.getPlayer());
+        untag.execute(untag.getCause(event.getPlayer(), DamageCause.ENTITY_ATTACK), player, combat.getPlayer());
+
         combat.getPlayer().incrementStatistic(Statistic.PLAYER_KILLS, 1);
-        event.getPlayer().incrementStatistic(Statistic.DEATHS, 1);
+        event.getPlayer().incrementStatistic(Statistic.DEATHS, 1);   
     }
 }

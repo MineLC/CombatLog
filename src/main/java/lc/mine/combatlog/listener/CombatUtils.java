@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import lc.mine.combatlog.message.Message;
@@ -24,20 +25,17 @@ public final class CombatUtils {
     public void execute(final DamageCause cause, final Player victim, final Player killer) {
         sendMessage(cause, victim, killer);
 
-        PlayerData killerData = database.getCached(killer.getUniqueId());
-        if (killerData == null) {
-            killerData = new PlayerData.New(killer.getName());
-            database.create(killer, killerData);
-        }
+        final PlayerData killerData = database.getCached(killer.getUniqueId());
         killerData.setLcoins(killerData.getLcoins() + options.getLcoinsOnKill());
         Message.get().send(killer, "kill-reward");
     }
 
     public DamageCause getCause(final Player player, final DamageCause fallback) {
-        if (player.getLastDamageCause() == null) {
+        final EntityDamageEvent lastDamageCause = player.getLastDamageCause();
+        if (lastDamageCause == null) {
             return fallback;
         }
-        return player.getLastDamageCause().getCause();
+        return lastDamageCause.getCause();
     }
 
     public void sendMessage(final DamageCause cause, final Player victim, final Player killer) {
