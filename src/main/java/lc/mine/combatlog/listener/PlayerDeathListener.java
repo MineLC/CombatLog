@@ -48,7 +48,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         final PlayerInCombat enemy = playersInCombat.get(combat.getPlayer().getUniqueId());
-        if (enemy.getPlayer().equals(victim)) {
+        if (enemy != null && enemy.getPlayer().equals(victim)) {
             playersInCombat.remove(combat.getPlayer().getUniqueId());
         }
 

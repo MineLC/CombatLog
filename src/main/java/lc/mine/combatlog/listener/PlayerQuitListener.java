@@ -31,7 +31,7 @@ public final class PlayerQuitListener implements Listener {
             return;
         }
         final PlayerInCombat enemy = playersInCombat.get(combat.getPlayer().getUniqueId());
-        if (enemy.getPlayer().equals(player)) {
+        if (enemy != null && enemy.getPlayer().equals(player)) {
             playersInCombat.remove(combat.getPlayer().getUniqueId());
         }
 

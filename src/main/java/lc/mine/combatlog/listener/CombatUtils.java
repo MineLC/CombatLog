@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import lc.mine.combatlog.events.PlayerDeathCombatLog;
 import lc.mine.combatlog.message.Message;
 import lc.mine.combatlog.storage.Options;
 import lc.mine.core.database.Database;
@@ -28,6 +29,8 @@ public final class CombatUtils {
         final PlayerData killerData = database.getCached(killer.getUniqueId());
         killerData.setLcoins(killerData.getLcoins() + options.getLcoinsOnKill());
         Message.get().send(killer, "kill-reward");
+    
+        Bukkit.getServer().getPluginManager().callEvent(new PlayerDeathCombatLog(victim, killer));
     }
 
     public DamageCause getCause(final Player player, final DamageCause fallback) {
