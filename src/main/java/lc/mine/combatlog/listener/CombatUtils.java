@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import lc.mine.combatlog.events.CustomPlayerDeathEvent;
+import lc.mine.combatlog.events.PlayerCombatLogEvent;
 import lc.mine.combatlog.message.Message;
 import lc.mine.combatlog.storage.Options;
 import lc.mine.core.database.Database;
@@ -24,16 +24,18 @@ public final class CombatUtils {
     }
 
     public void execute(final DamageCause cause, final Player victim, final Player killer) {
-        sendMessage(cause, victim, killer);
+        final String deathMessage = getDeathMessage(cause, victim, killer);
 
         final PlayerData killerData = database.getCached(killer.getUniqueId());
         killerData.setLcoins(killerData.getLcoins() + options.getLcoinsOnKill());
         Message.get().send(killer, "kill-reward");
-        callEvent(victim, killer);
+        trySendDeathMessage(deathMessage, callEvent(victim, killer, deathMessage));
     }
 
-    public void callEvent(final Player victim, final Player killer) {
-        Bukkit.getServer().getPluginManager().callEvent(new CustomPlayerDeathEvent(victim, killer, killer != null));    
+    public PlayerCombatLogEvent callEvent(final Player victim, final Player killer, final String deathMessage) {
+        final PlayerCombatLogEvent event = new PlayerCombatLogEvent(victim, killer, deathMessage);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        return event;    
     }
 
     public DamageCause getCause(final Player player, final DamageCause fallback) {
@@ -44,15 +46,30 @@ public final class CombatUtils {
         return lastDamageCause.getCause();
     }
 
-    public void sendMessage(final DamageCause cause, final Player victim, final Player killer) {
-        String message = Message.get().message(cause.name())
-            .replace("%v%", victim.getName());
+    public void trySendDeathMessage(final String deathMessage, final PlayerCombatLogEvent event) {
+        if (event.isCancelDeathMessage() || deathMessage.isEmpty()) {
+            return;
+        }
+        Bukkit.broadcastMessage(deathMessage);
+    }
+
+    public void trySendDeathMessage(final Player player) {
+        final String deathMessage = getDeathMessage(getCause(player, DamageCause.SUICIDE), player, null);
+        trySendDeathMessage(deathMessage, callEvent(player, null, deathMessage));
+    }
+
+    public String getDeathMessage(final DamageCause cause, final Player victim, final Player killer) {
+        String message = Message.get().message(cause.name());
+        if (message.isEmpty()) {
+            return "";
+        }
+        message = message.replace("%v%", victim.getName());
         if (killer != null) {
             message += Message.get().message("if-killer-exist").replace("%k%", killer.getName());
             killer.playSound(killer.getLocation(), Sound.EXPLODE, 1.0f, 1.0f);
             killer.getWorld().playEffect(victim.getLocation(), Effect.EXPLOSION_LARGE, 1);
         }
-        Bukkit.broadcastMessage(message);
+        return message;
     }
 
     public Options getOptions() {

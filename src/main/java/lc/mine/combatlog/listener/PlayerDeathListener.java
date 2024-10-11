@@ -43,8 +43,7 @@ public class PlayerDeathListener implements Listener {
         victim.playSound(victim.getLocation(), Sound.BAT_DEATH, 1.0f, 1.0f);
 
         if (combat == null) {
-            untag.sendMessage(untag.getCause(victim, DamageCause.SUICIDE), victim, null);
-            untag.callEvent(victim, null);
+            untag.trySendDeathMessage(victim);
             return;
         }
 
@@ -54,8 +53,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         if ((System.currentTimeMillis() - combat.getTime() > untag.getOptions().getPvpTagTime())) {
-            untag.sendMessage(untag.getCause(victim, DamageCause.SUICIDE), victim, null);
-            untag.callEvent(victim, null);
+            untag.trySendDeathMessage(victim);
             return;
         }
         untag.execute(untag.getCause(victim, DamageCause.ENTITY_ATTACK), victim, combat.getPlayer());
