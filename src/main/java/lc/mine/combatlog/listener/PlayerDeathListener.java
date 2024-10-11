@@ -44,6 +44,7 @@ public class PlayerDeathListener implements Listener {
 
         if (combat == null) {
             untag.sendMessage(untag.getCause(victim, DamageCause.SUICIDE), victim, null);
+            untag.callEvent(victim, null);
             return;
         }
 
@@ -54,6 +55,7 @@ public class PlayerDeathListener implements Listener {
 
         if ((System.currentTimeMillis() - combat.getTime() > untag.getOptions().getPvpTagTime())) {
             untag.sendMessage(untag.getCause(victim, DamageCause.SUICIDE), victim, null);
+            untag.callEvent(victim, null);
             return;
         }
         untag.execute(untag.getCause(victim, DamageCause.ENTITY_ATTACK), victim, combat.getPlayer());
